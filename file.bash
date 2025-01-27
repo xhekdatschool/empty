@@ -151,20 +151,30 @@ echo "this might take a while..."
 fi
 sleep 3
 cd .
-tree -a
+# tree
+OGDIR=$(pwd)
 if [ $? -ne 0 ]; then
     sudo apt install tree
     printf "${RED}tree command not found and/or package manager; apt doesn't exist\n"
     printf "${WHITE}"
-
 else
     printf "${GREEN}success, tree command found, continuing...\n\n"
     printf "${WHITE}"
-    cd .
-    tree -a
+    cd ..
+    cd ..
+    cd ..
+    cd .. 
+    cd ..
+    cd ..
+    tree
 fi
-cd /workspaces/empty
-
+cd ..
+cd ..
+cd .. 
+cd ..
+cd ..
+tree 
+cd $OGDIR
 # nano
 echo "installing nano via apt"
 
