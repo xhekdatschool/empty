@@ -179,37 +179,6 @@ else
         printf "${WHITE}"
     fi
 fi
-
-echo "installing xdotool via apt"
-echo "installing xdotool via apt"
-# Check if xdotool is installed
-if ! command -v xdotool &> /dev/null; then
-    printf "${RED}xdotool not found. Installing...\n"
-    printf "${WHITE}"
-    if command -v apt &> /dev/null; then
-        sudo apt-get install xdotool
-    elif command -v yum &> /dev/null; then
-        sudo yum install xdotool
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install xdotool
-    elif command -v zypper &> /dev/null; then
-        sudo zypper install xdotool
-    elif command -v pacman &> /dev/null; then
-        sudo pacman -S xdotool
-    elif command -v apk &> /dev/null; then
-        sudo apk add xdotool
-    elif command -v emerge &> /dev/null; then
-        sudo emerge x11-misc/xdotool
-    elif command -v xbps-install &> /dev/null; then
-        sudo xbps-install -S xdotool
-    elif command -v pkg &> /dev/null; then
-        sudo pkg install xdotool
-    else
-        printf "${RED}No supported package manager found to install xdotool\n"
-        printf "${WHITE}"
-        exit 1
-    fi
-fi
-
+# still working on this
 sleep 1
 echo "ended"
