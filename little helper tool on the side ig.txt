@@ -1,0 +1,27 @@
+apt install <package-name> # install here
+# check if the apt command resulted in an error, 
+# -ne is to mean not equal to 0 [error code]
+if [ $? -ne 0 ]; then
+        # does: if error, error code isnt 0
+        printf "${RED}apt command not found\n"
+        printf "${RED}apt command failed\n"
+        printf "${RED}An error occurred, please wait\n"
+        printf "${WHITE}\n"
+        sleep 2
+        # if resulted in error: then: see if 
+        # command exists and install
+        if command -v curl &> /dev/null; then 
+        # curl is to run the command, 
+        # but it doesn't appear.
+            # similar, but -v and command is to 
+            # check if command exists, &> 
+            # is to mean to 
+            # redirect the output to /dev/null
+            # just a better way to check if 
+            # command 
+            # exists rather than checking for 
+            # error codes 
+            # applies to the list below too
+            else 
+                # if the command does not exist 
+                
