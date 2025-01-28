@@ -9,7 +9,6 @@ echo "this might take a while..."
     apt list
     sudo apt update
     printf "${GREEN}installing htop!\n"
-    printf "${WHITE}installing htop!\n"
     printf "${WHITE}"
     sleep 3
     sudo apt install htop
@@ -141,8 +140,7 @@ echo "this might take a while..."
             fi
         fi
     else
-    # but only if apt is found then this'll run LMAO,
-    # its such of a long list but it does work i think
+
     # This block runs only if apt is found,
     # its such of a long list but it does work i think
     # i had copilot help me write all of that out
@@ -154,10 +152,12 @@ cd .
 # tree
 OGDIR=$(pwd)
 if [ $? -ne 0 ]; then
+    
+    printf "${RED}tree command not found and/or package manager; apt doesn't exist\n"&sleep 1
     sudo apt install tree
-    printf "${RED}tree command not found and/or package manager; apt doesn't exist\n"
     printf "${WHITE}"
 else
+    sleep 3
     printf "${GREEN}success, tree command found, continuing...\n\n"
     printf "${WHITE}"
     cd ..
@@ -194,19 +194,19 @@ else
         printf "${WHITE}"
     fi
 fi
+sleep 2
 # still working on this
 # wondering what other packages i should install...oh i know!
 # python3
 printf "${GREEN}installing python3 via apt"
 printf "${WHITE}"
-sleep 1
+sleep 2
 sudo apt install python3
 if [ $? -ne 0 ]; then #if its not installed then install it done via checking it in the background
     printf "${RED}Failed to install python3\n"
     printf "${WHITE}"
     printf "${WHITE}"
-    if command -v yum &> /dev/null; then # AUUUUUUUUUUGH
-    if command -v yum &> /dev/null; then # Check if yum exists
+    if command -v yum &> /dev/null; then # <-- pain, checks if yum exists
         printf "${WHITE}"
         printf "${GREEN}Attempting to install python3 using yum...\n"
         printf "${WHITE}"
@@ -318,8 +318,8 @@ else
 fi
 # uhhh i felt like i should've done like manual...ah screw it i'll do it rn
 # ooh, and git too prob
-
-# man
+sleep 2
+# man / manual
 printf "${GREEN}install manual/man via apt"
 sudo apt install man # Ensure to install `man-db` and `glibc-doc` as well
 if [ $? -ne 0 ]; then
@@ -396,88 +396,171 @@ if [ $? -ne 0 ]; then
                                 fi
                         fi
             fi
-fi  
-        # success
-        echo "man installed, now man-db"
-        if [ $? -ne 0 ]; then
-        # fail
-        printf "${RED}failed, starting other packages..."
+fi  # manual-db install
+  # success
+sleep 3
+
+echo "man installed, now man-db"
+sudo apt-get install man-db
+if [ $? -ne 0 ]; then
+    # fail
+    printf "${RED}failed, starting other packages..."
+    printf "${WHITE}"
+    sleep 2
+    if command -v yum &> /dev/null; then
+        printf "${GREEN}yum command found\n"
+        printf "${WHITE}"
+        printf "${GREEN}Attempting to install"
+        printf "${WHITE}"
+        sleep 1
+        sudo yum install man-db
+    else
+        printf "${RED}yum command not found, resulting to dnf\n"
         printf "${WHITE}"
         sleep 2
-            if command -v yum &> /dev/null; then
-            printf "${GREEN}yum command found\n"
+        if command -v dnf &> /dev/null; then
+            printf "${GREEN}dnf command found\n"
             printf "${WHITE}"
             printf "${GREEN}Attempting to install"
             printf "${WHITE}"
             sleep 1
-            sudo yum install man-db
-                else
-                printf "${RED}yum command not found, resulting to dnf\n"
+            sudo dnf install man-db
+        else
+            printf "${RED}dnf package not found, resulting to zypper."
+            printf "${WHITE}"
+            sleep 2
+            if command -v zypper &> /dev/null; then
+                printf "${GREEN}zypper command found\n"
+                printf "${WHITE}"
+                printf "${GREEN}Attempting to install"
+                printf "${WHITE}"
+                sleep 1
+                sudo zypper install man-db
+            else
+                printf "${RED}zypper package not found, resulting to pacman."
                 printf "${WHITE}"
                 sleep 2
-                if command -v dnf &> /dev/null; then
-                    printf "${GREEN}dnf command found\n"
+                if command -v pacman &> /dev/null; then
+                    printf "${GREEN}pacman command found\n"
                     printf "${WHITE}"
                     printf "${GREEN}Attempting to install"
                     printf "${WHITE}"
                     sleep 1
-                    sudo dnf install man-db
-                    else
-                    printf "${RED}dnf package not found, resulting to zypper."
+                    sudo pacman -S man-db
+                else
+                    printf "${RED}pacman package not found, resulting to apk."
                     printf "${WHITE}"
-                    sleep 2
-                    if command -v zypper &> /dev/null; then
-                        printf "${GREEN}zypper command found\n"
+                    if command -v apk &> /dev/null; then
+                        printf "${GREEN}apk command found\n"
                         printf "${WHITE}"
                         printf "${GREEN}Attempting to install"
                         printf "${WHITE}"
-                        sleep 1
-                        sudo zypper install man-db
-                        else
-                            printf "${RED}zypper package not found, resulting to pacman."
+                        sleep 2
+                        sudo apk add man-db
+                    else
+                        printf "${RED}apk package not found, resulting to emerge."
+                        printf "${WHITE}"
+                        sleep 2
+                        if command -v emerge &> /dev/null; then
+                            printf "${GREEN}emerge command found\n"
                             printf "${WHITE}"
-                            sleep 2
-                            echo "why me brah"
-                        if command -v pacman &> /dev/null; then
-                        printf "${GREEN}pacman command found\n"
-                        printf "${WHITE}"
-                        printf "${GREEN}Attempting to install"
-                        printf "${WHITE}"
-                        sleep 1
-                        sudo pacman -S man-db
-                            else
-                            printf "${RED}pacman package not found, resulting to apk."
-                            if command -v apk &> /dev/null; then
-                                printf "${GREEN}apk command found\n"
-                                printf "${WHITE}"
-                                printf "${GREEN}Attempting to install"
-                                printf "${WHITE}"
-                                sleep 2
-                                sudo apk add man-db
-                                else
-                                    printf "${RED}apk package not found, resulting to emerge."
-                                    printf "${WHITE}"
-                                    sleep 2
-                                    if command -v emerge &> /dev/null; then
-                                    printf "${GREEN}emerge command found\n"
-                                    printf "${WHITE}"
-                                    printf "${GREEN}Attempting to install"
-                                    printf "${WHITE}"
-                                    sleep 1
-                                    sudo emerge man-db
-                                        printf "${RED}emerge package not found. Please install it manually."
-                                        printf "${RED}emerge package not found, just...install it manually ig"
-                                    fi
-                            fi
+                            printf "${GREEN}Attempting to install"
+                            printf "${WHITE}"
+                            sleep 1
+                            sudo emerge man-db
+                            printf "${RED}emerge package not found. Please install it manually."
+                            printf "${RED}emerge package not found, just...install it manually ig"
                         fi
                     fi
                 fi
             fi
-    fi 
+        fi
+    fi
 else
     echo 'installed.'
-
+    sleep 3
 fi
-    
+# git
+    echo "beginning git"
+    sudo apt install git
+        if [ $? -ne 0 ]; then
+            printf "${RED}Failed to install git\n"
+            printf "${WHITE}"
+            printf "${WHITE}"
+            if command -v yum &> /dev/null; then
+                printf "${GREEN}yum command found\n"
+                printf "${WHITE}"
+                printf "${GREEN}Attempting to install"
+                printf "${WHITE}"
+                sleep 1
+                sudo yum install git
+                    else
+                        printf "${RED}yum command not found, resulting to dnf\n"
+                        printf "${WHITE}"
+                        sleep 2
+                        if command -v dnf &> /dev/null; then
+                            printf "${GREEN}dnf command found\n"
+                            printf "${WHITE}"
+                            printf "${GREEN}Attempting to install"
+                            printf "${WHITE}"
+                            sleep 1
+                            sudo dnf install git
+                            else
+                                printf "${RED}dnf package not found, resulting to zypper."
+                                printf "${WHITE}"
+                                sleep 2
+                                if command -v zypper &> /dev/null; then
+                                    printf "${GREEN}zypper command found\n"
+                                    printf "${WHITE}"
+                                    printf "${GREEN}Attempting to install"
+                                    printf "${WHITE}"
+                                    sleep 1
+                                    sudo zypper install git
+                                        else
+                                            printf "${RED}zypper package not found, resulting to pacman."
+                                            printf "${WHITE}"
+                                            sleep 2
+                                            printf "${RED}pacman package not found, resulting to apk.\n"
+                                            printf "${WHITE}"
+                                            printf "${WHITE}"
+                                    if command -v pacman &> /dev/null; then
+                                        printf "${GREEN}pacman command found\n"
+                                        printf "${WHITE}"
+                                        printf "${GREEN}Attempting to install"
+                                        printf "${WHITE}"
+                                        sleep 1
+                                        sudo pacman -S git
+                                            else
+                                                printf "${RED}pacman package not found, resulting to apk."
+                                                if command -v apk &> /dev/null; then
+                                                    printf "${GREEN}apk command found\n"
+                                                    printf "${WHITE}"
+                                                    printf "${GREEN}Attempting to install"
+                                                    printf "${WHITE}"
+                                                    sleep 2
+                                                    sudo apk add git
+                                                        else
+                                                            printf "${RED}apk package not found, resulting to emerge."
+                                                            printf "${WHITE}"
+                                                            sleep 2
+                                                            if command -v emerge &> /dev/null; then
+                                                                printf "${GREEN}emerge command found\n"
+                                                                printf "${WHITE}"
+                                                                printf "${GREEN}Attempting to install"
+                                                                printf "${WHITE}"
+                                                                sleep 1
+                                                                sudo emerge git
+                                                            fi
+                                                fi
+                                    fi
+                                fi
+                        fi 
+                fi
+        else
+        echo "success"
+
+        fi     
+
+
 printf "\n"
 echo "ended"
